@@ -1,0 +1,26 @@
+.sidebar{
+    width:250px;
+    min-height:100vh;
+    background:#153B63;
+    color:white;
+    padding:25px;
+}
+
+.sidebar h2{
+    margin-bottom:40px;
+    text-align:center;
+}
+
+.sidebar a{
+    display:block;
+    color:white;
+    text-decoration:none;
+    padding:15px;
+    margin-bottom:10px;
+    border-radius:8px;
+    transition:.3s;
+}
+
+.sidebar a:hover{
+    background:#25598f;
+}
