@@ -20,9 +20,18 @@ class LoanUpdate(LoanBase):
     status: Optional[str] = None
 
 
+class LoanStatusUpdate(BaseModel):
+    status: str
+
+
 class LoanResponse(LoanBase):
     loan_id: int
     status: str
+
+    customer_name: Optional[str] = None
+
+    risk_category: Optional[str] = None
+    confidence: Optional[float] = None
 
     class Config:
         from_attributes = True

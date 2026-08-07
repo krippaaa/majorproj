@@ -1,3 +1,6 @@
+# This file establishes the connection between 
+# FastAPI and PostgreSQL using SQLAlchemy.
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 from dotenv import load_dotenv

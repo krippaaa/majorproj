@@ -13,19 +13,28 @@ class LoanApplication(Base):
     customer_id = Column(Integer, ForeignKey("customers.customer_id"))
 
     loan_amount = Column(Float, nullable=False)
-
     loan_purpose = Column(String(255))
-
     loan_term = Column(Integer)
-
     annual_income = Column(Float)
-
     employment_status = Column(String(100))
-
     credit_score = Column(Integer)
 
     status = Column(String(50), default="Pending")
 
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    created_at = Column(
+        DateTime(timezone=True),
+        server_default=func.now()
+    )
 
-    customer = relationship("Customer", back_populates="loans")
+    customer = relationship(
+        "Customer",
+        back_populates="loans"
+    )
+
+    predictions = relationship(
+        "Prediction",
+        back_populates="loan",
+        cascade="all, delete"
+    )
+
+    
