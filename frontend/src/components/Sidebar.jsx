@@ -1,40 +1,39 @@
 import { Link } from "react-router-dom";
-import {
-  FaHome,
-  FaUsers,
-  FaMoneyCheckAlt,
-  FaRobot,
-  FaLink,
-} from "react-icons/fa";
-
 import "./Sidebar.css";
 
 export default function Sidebar() {
   return (
-    <div className="sidebar">
+    <aside className="sidebar">
 
-      <h2>AI Credit Risk</h2>
+      <div className="logo">
+        <h2>Credit Risk</h2>
+        <p>Admin Panel</p>
+      </div>
 
-      <Link to="/">
-        <FaHome /> Dashboard
-      </Link>
+      <nav className="menu">
 
-      <Link to="/customers">
-        <FaUsers /> Customers
-      </Link>
+        <Link to="/dashboard">Dashboard</Link>
 
-      <Link to="/loans">
-        <FaMoneyCheckAlt /> Loans
-      </Link>
+        <Link to="/customers">Customers</Link>
 
-      <Link to="/ai">
-        <FaRobot /> AI Prediction
-      </Link>
+        <Link to="/loans">Loans</Link>
 
-      <Link to="/blockchain">
-        <FaLink /> Blockchain
-      </Link>
+        <Link to="/ai">AI Prediction</Link>
 
-    </div>
+        <Link to="/blockchain">Blockchain</Link>
+
+      </nav>
+
+      <button
+        className="logout-btn"
+        onClick={() => {
+          localStorage.removeItem("token");
+          window.location.href = "/";
+        }}
+      >
+        Logout
+      </button>
+
+    </aside>
   );
 }

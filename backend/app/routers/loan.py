@@ -1,4 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException
+import json
+import urllib.request
+from datetime import datetime
+import json
+import urllib.request
+from datetime import datetime
 from sqlalchemy.orm import Session
 
 from app.database.db import SessionLocal
@@ -16,6 +22,32 @@ from app.schemas.loan_application import (
 )
 
 from ml.predict import predict_risk
+
+
+def send_loan_to_blockchain(loan, customer, risk_category, confidence):
+    payload = {
+        "loanId": str(loan.loan_id),
+        "customerId": str(loan.customer_id),
+        "customerName": customer.full_name,
+        "amount": str(loan.loan_amount),
+        "loanPurpose": loan.loan_purpose or "",
+        "riskLevel": risk_category,
+        "confidence": str(confidence),
+        "status": loan.status or "Pending",
+        "timestamp": datetime.utcnow().isoformat() + "Z"
+    }
+
+    data = json.dumps(payload).encode("utf-8")
+
+    request = urllib.request.Request(
+        "http://localhost:4000/api/blockchain/loans",
+        data=data,
+        headers={"Content-Type": "application/json"},
+        method="POST"
+    )
+
+    with urllib.request.urlopen(request, timeout=15) as response:
+        return json.loads(response.read().decode("utf-8"))
 
 
 router = APIRouter(
@@ -178,15 +210,43 @@ def create_loan(
 
         db.add(prediction)
 
+        # -----------------------------
+        # Save Loan to Hyperledger Fabric
+        # -----------------------------
+        try:
+            send_loan_to_blockchain(
+                new_loan,
+                customer,
+                risk_category,
+                confidence
+            )
+        except Exception as blockchain_error:
+            db.rollback()
+            raise HTTPException(
+                status_code=500,
+                detail=f"Blockchain transaction failed: {blockchain_error}"
+            )
 
         # Commit everything together
         db.commit()
 
         db.refresh(new_loan)
 
-
-        return new_loan
-
+        return {
+         "customer_id": new_loan.customer_id,
+         "loan_amount": new_loan.loan_amount,
+         "loan_purpose": new_loan.loan_purpose,
+         "loan_term": new_loan.loan_term,
+         "annual_income": new_loan.annual_income,
+         "employment_status": new_loan.employment_status,
+         "credit_score": new_loan.credit_score,
+         "loan_id": new_loan.loan_id,
+         "status": new_loan.status,
+         "customer_name": customer.full_name,
+         "risk_category": risk_category,
+         "confidence": confidence
+     }
+       
 
 
     except Exception as e:
