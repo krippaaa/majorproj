@@ -1,0 +1,50 @@
+from ml.predict_credit_score import predict_credit_score
+
+customer = {
+    "Age": 23,
+    "Gender": "Female",
+    "Province": "Bagmati",
+    "District": "Kathmandu",
+    "Education_Level": "Bachelor",
+    "Occupation": "Software Developer",
+    "Employment_Type": "Permanent",
+    "Monthly_Income_NPR": 85000,
+    "Monthly_Expenses_NPR": 40000,
+    "Savings_NPR": 300000,
+    "Existing_Loan_Amount_NPR": 100000,
+    "Loan_Duration_Months": 24,
+    "Total_Assets_NPR": 800000,
+    "Total_Liabilities_NPR": 200000,
+    "Debt_to_Income_Ratio": 0.20,
+    "Collateral_Value_NPR": 500000,
+    "Net_Worth_NPR": 600000,
+    "Previous_Loans": 1,
+    "Previous_Default": "No",
+    "Late_Payments": 2,
+    "Repayment_History": "Good",
+    "Credit_Utilization": 35,
+    "Credit_Inquiries": 2,
+    "Active_Loan_Accounts": 1,
+    "Monthly_Transaction_Count": 70,
+    "Average_Transaction_Amount_NPR": 12000,
+    "Cash_Deposit_Frequency": 5,
+    "Cash_Withdrawal_Frequency": 8,
+    "Digital_Banking_Usage": "High",
+    "Mobile_Banking_Usage": "High",
+    "ATM_Usage": 8,
+    "Average_Monthly_Balance": 250000,
+    "Spending_Pattern": "Moderate",
+    "Merchant_Transaction_Count": 45,
+    "Monthly_Remittance_NPR": 0,
+    "Insurance_Status": "Yes",
+    "Insurance_Premium_NPR": 20000,
+    "Utility_Bill_Payment_Score": 85,
+    "Mobile_Wallet_Usage": "High",
+    "Cooperative_Membership": "No",
+    "Digital_Payment_Frequency": 40,
+    "Institution": "Nabil Bank"
+}
+
+score = predict_credit_score(customer)
+
+print("Predicted Credit Score:", score)

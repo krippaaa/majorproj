@@ -22,6 +22,7 @@ from app.schemas.loan_application import (
 )
 
 from ml.predict import predict_risk
+from ml.predict_credit_score import predict_credit_score
 
 
 def send_loan_to_blockchain(loan, customer, risk_category, confidence):
@@ -117,8 +118,6 @@ def create_loan(
             "Collateral_Value_NPR": customer.collateral_value_npr,
             "Net_Worth_NPR": customer.net_worth_npr,
 
-            "Credit_Score": customer.credit_score,
-
             "Previous_Loans": customer.previous_loans,
             "Previous_Default": customer.previous_default,
             "Late_Payments": customer.late_payments,
@@ -163,6 +162,14 @@ def create_loan(
 
 
         # -----------------------------
+        # AI Credit Score Prediction
+        # -----------------------------
+        predicted_credit_score = predict_credit_score(customer_data)
+
+        # Add AI-generated credit score for risk prediction
+        customer_data["Credit_Score"] = predicted_credit_score
+
+        # -----------------------------
         # AI Prediction
         # -----------------------------
         prediction_result = predict_risk(customer_data)
@@ -183,8 +190,13 @@ def create_loan(
         # -----------------------------
         # Save Loan
         # -----------------------------
+        loan_data = loan.model_dump()
+
+        # Use AI-generated credit score
+        loan_data["credit_score"] = predicted_credit_score
+
         new_loan = LoanApplication(
-            **loan.model_dump()
+            **loan_data
         )
 
 

@@ -5,9 +5,7 @@ from app.database.db import engine, Base
 
 from app.models.role import Role
 from app.models.user import User
-from app.models.customer import Customer
-from app.models.loan_application import LoanApplication
-from app.models.prediction import Prediction
+from app.models import Customer, LoanApplication, Prediction
 
 from app.routers import auth
 from app.routers import customer
